@@ -1,4 +1,4 @@
-setwd("/home/sergiy/Documents/Work/Nutricia/Rework/201712")
+setwd("/home/sergiy/Documents/Work/Nutricia/Rework/201802")
 
 library(data.table)
 library(reshape2)
@@ -12,7 +12,7 @@ library(googlesheets)
 data = fread("BFprocessed.csv", header = TRUE, stringsAsFactors = FALSE, data.table = TRUE)
 
 # Set current month
-YTD.No = 12
+YTD.No = 2
 
 dataTable = function(measure, level, linesToShow, filterSegments = NULL) {
     
@@ -175,15 +175,17 @@ dataSegmentChart = function(measure, level, linesToShow, filterSegments) {
 #                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17")
 #tableColnames5 = c("Segment", "SEP 17", "L3M", "YTD 17")
 
-tableColnames1 = c("Company", "DEC 17", "vs PP, pp", "YTD 17", "vs PY, pp", "MAT 17", "vs PY, pp")
-tableColnames2 = c("Brand", "DEC 17", "vs PP, pp", "YTD 17", "vs PY, pp", "MAT 17", "vs PY, pp")
-tableColnames3 = c("Company", "MAT 16", "MAT 17", ".", "YTD 16", "YTD 17", ".",
-                   "DEC 16", "JAN 17", "FEB 17", "MAR 17",
-                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17", "OCT 17", "NOV 17", "DEC 17")
-tableColnames4 = c("Brand", "MAT 16", "MAT 17", ".", "YTD 16", "YTD 17", ".",
-                   "DEC 16", "JAN 17", "FEB 17", "MAR 17",
-                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17", "OCT 17", "NOV 17", "DEC 17")
-tableColnames5 = c("Segment", "DEC 17", "L3M", "YTD 17")
+tableColnames1 = c("Company", "FEB 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
+tableColnames2 = c("Brand", "FEB 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
+tableColnames3 = c("Company", "MAT 17", "MAT 18", ".", "YTD 17", "YTD 18", ".",
+                   "FEB 17", "MAR 17",
+                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17", "OCT 17", 
+                   "NOV 17", "DEC 17", "JAN 18", "FEB 18")
+tableColnames4 = c("Brand", "MAT 17", "MAT 18", ".", "YTD 17", "YTD 18", ".",
+                   "FEB 17", "MAR 17",
+                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17", "OCT 17", 
+                   "NOV 17", "DEC 17", "JAN 18", "FEB 18")
+tableColnames5 = c("Segment", "FEB 18", "L3M", "YTD 18")
 
 gs_title("Baby Food data")
 gs_object <- gs_key("1efRfjHRRgtbLwwTznmveBoKiKwx_xMsBxMy4zlwhqDs")
@@ -204,11 +206,32 @@ gs_edit_cells(gs_object, ws="Companies",
               col_names=FALSE, 
               trim=FALSE)
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Companies", input = tableColnames1, byrow=TRUE, anchor="A363")
+gs_edit_cells(gs_object, ws="Companies", 
+              input = dataTable("Volume", "Company", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'), 
+              anchor="A364", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Companies", input = tableColnames1, byrow=TRUE, anchor="A383")
+gs_edit_cells(gs_object, ws="Companies", 
+              input = dataTable("Value", "Company", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'), 
+              anchor="A384", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Companies", input = tableColnames1, byrow=TRUE, anchor="A43")
 gs_edit_cells(gs_object, ws="Companies", 
               input = dataTable("Volume", "Company", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'), 
               anchor="A44", 
               col_names=FALSE, 
               trim=FALSE)
@@ -216,7 +239,7 @@ gs_edit_cells(gs_object, ws="Companies",
 gs_edit_cells(gs_object, ws="Companies", input = tableColnames1, byrow=TRUE, anchor="A63")
 gs_edit_cells(gs_object, ws="Companies", 
               input = dataTable("Value", "Company", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'),
               anchor="A64", 
               col_names=FALSE, 
               trim=FALSE)
@@ -356,11 +379,32 @@ gs_edit_cells(gs_object, ws="Brands",
               col_names=FALSE, 
               trim=FALSE)
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2563")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Volume", "Brand", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A2564", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2582")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Value", "Brand", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A2583", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A44")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Volume", "Brand", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'),
               anchor="A45", 
               col_names=FALSE, 
               trim=FALSE)
@@ -368,7 +412,7 @@ gs_edit_cells(gs_object, ws="Brands",
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A63")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Value", "Brand", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'),
               anchor="A64", 
               col_names=FALSE, 
               trim=FALSE)
@@ -819,11 +863,32 @@ gs_edit_cells(gs_object, ws="Brands",
 ### COMPANIES CHARTS
 
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="CoCharts", input = tableColnames3, byrow=TRUE, anchor="A323")
+gs_edit_cells(gs_object, ws="CoCharts", 
+              input = dataChart("Volume", "Company", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A324", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="CoCharts", input = tableColnames3, byrow=TRUE, anchor="A342")
+gs_edit_cells(gs_object, ws="CoCharts", 
+              input = dataChart("Value", "Company", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A343", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="CoCharts", input = tableColnames3, byrow=TRUE, anchor="A4")
 gs_edit_cells(gs_object, ws="CoCharts", 
               input = dataChart("Volume", "Company", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'), 
               anchor="A5", 
               col_names=FALSE, 
               trim=FALSE)
@@ -831,7 +896,7 @@ gs_edit_cells(gs_object, ws="CoCharts",
 gs_edit_cells(gs_object, ws="CoCharts", input = tableColnames3, byrow=TRUE, anchor="A23")
 gs_edit_cells(gs_object, ws="CoCharts", 
               input = dataChart("Value", "Company", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'), 
               anchor="A24", 
               col_names=FALSE, 
               trim=FALSE)
@@ -957,12 +1022,32 @@ gs_edit_cells(gs_object, ws="CoCharts",
 
 ## BRANDS CHARTS
 
+#IMF + Dru Food + Puree
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2523")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Volume", "Brand", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A2524", 
+              col_names=FALSE, 
+              trim=FALSE)
 
-#IMF + Cereal + Biscuits
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2542")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Value", "Brand", 11, 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD" | 
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS"'),
+              anchor="A2543", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A4")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Volume", "Brand", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'), 
               anchor="A5", 
               col_names=FALSE, 
               trim=FALSE)
@@ -970,7 +1055,7 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A23")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Value", "Brand", 11, 
-                                'PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | PS3 == "INSTANT CEREALS"'), 
+                                'PS0 == "IMF" | PS2 == "DRY FOOD"'), 
               anchor="A24", 
               col_names=FALSE, 
               trim=FALSE)
@@ -1702,12 +1787,32 @@ gs_edit_cells(gs_object, ws="AdditionalCharts",
 
 # Center
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2603")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "CENTER"'), 
+              anchor="A2604", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2622")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "CENTER"'), 
+              anchor="A2623", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1123")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "CENTER"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "CENTER"'), 
               anchor="A1124", 
               col_names=FALSE, 
               trim=FALSE)
@@ -1715,8 +1820,7 @@ gs_edit_cells(gs_object, ws="Brands",
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1142")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "CENTER"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "CENTER"'), 
               anchor="A1143", 
               col_names=FALSE, 
               trim=FALSE)
@@ -1859,12 +1963,32 @@ gs_edit_cells(gs_object, ws="Brands",
 
 # East
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2643")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "EAST"'), 
+              anchor="A2644", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2662")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "EAST"'), 
+              anchor="A2663", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1483")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "EAST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "EAST"'), 
               anchor="A1484", 
               col_names=FALSE, 
               trim=FALSE)
@@ -1872,8 +1996,7 @@ gs_edit_cells(gs_object, ws="Brands",
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1502")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "EAST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "EAST"'), 
               anchor="A1503", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2016,12 +2139,32 @@ gs_edit_cells(gs_object, ws="Brands",
 
 # South
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2683")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "SOUTH"'), 
+              anchor="A2684", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2702")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "SOUTH"'), 
+              anchor="A2703", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1843")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "SOUTH"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "SOUTH"'), 
               anchor="A1844", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2029,8 +2172,7 @@ gs_edit_cells(gs_object, ws="Brands",
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A1862")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "SOUTH"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "SOUTH"'), 
               anchor="A1863", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2173,12 +2315,32 @@ gs_edit_cells(gs_object, ws="Brands",
 
 # West
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2723")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "WEST"'), 
+              anchor="A2724", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2742")
+gs_edit_cells(gs_object, ws="Brands", 
+              input = dataTable("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "WEST"'), 
+              anchor="A2743", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2203")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "WEST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "WEST"'), 
               anchor="A2204", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2186,8 +2348,7 @@ gs_edit_cells(gs_object, ws="Brands",
 gs_edit_cells(gs_object, ws="Brands", input = tableColnames2, byrow=TRUE, anchor="A2222")
 gs_edit_cells(gs_object, ws="Brands", 
               input = dataTable("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "WEST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "WEST"'), 
               anchor="A2223", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2332,12 +2493,32 @@ gs_edit_cells(gs_object, ws="Brands",
 
 # Center
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2563")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "CENTER"'), 
+              anchor="A2564", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2582")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "CENTER"'), 
+              anchor="A2583", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1083")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "CENTER"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "CENTER"'), 
               anchor="A1084", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2345,8 +2526,7 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1102")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "CENTER"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "CENTER"'), 
               anchor="A1103", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2489,12 +2669,32 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 
 # East
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2603")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "EAST"'), 
+              anchor="A2604", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2622")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "EAST"'), 
+              anchor="A2623", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1443")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "EAST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "EAST"'), 
               anchor="A1444", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2502,8 +2702,7 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1462")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "EAST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "EAST"'), 
               anchor="A1463", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2646,12 +2845,32 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 
 # South
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2643")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "SOUTH"'), 
+              anchor="A2644", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2662")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "SOUTH"'), 
+              anchor="A2663", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1803")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "SOUTH"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "SOUTH"'), 
               anchor="A1804", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2659,8 +2878,7 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A1822")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "SOUTH"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "SOUTH"'), 
               anchor="A1823", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2803,12 +3021,33 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 
 # West
 
-#IMF + Cereal + Biscuits
+#IMF + Dry Food + Puree
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2683")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Volume", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "WEST"'), 
+              anchor="A2684", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2702")
+gs_edit_cells(gs_object, ws="BrandsCharts", 
+              input = dataChart("Value", "Brand", 11, 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD" |
+                                PS3 == "SAVOURY MEAL" |
+                                PS3 == "FRUITS") & Region == "WEST"'), 
+              anchor="A2703", 
+              col_names=FALSE, 
+              trim=FALSE)
+
+
+#IMF + Dry Food
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2163")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Volume", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "WEST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "WEST"'), 
               anchor="A2164", 
               col_names=FALSE, 
               trim=FALSE)
@@ -2816,8 +3055,7 @@ gs_edit_cells(gs_object, ws="BrandsCharts",
 gs_edit_cells(gs_object, ws="BrandsCharts", input = tableColnames4, byrow=TRUE, anchor="A2182")
 gs_edit_cells(gs_object, ws="BrandsCharts", 
               input = dataChart("Value", "Brand", 11, 
-                                '(PS0 == "IMF" | PS3 == "CEREAL BISCUITS" | 
-                                PS3 == "INSTANT CEREALS") & Region == "WEST"'), 
+                                '(PS0 == "IMF" | PS2 == "DRY FOOD") & Region == "WEST"'), 
               anchor="A2183", 
               col_names=FALSE, 
               trim=FALSE)
