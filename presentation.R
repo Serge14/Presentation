@@ -165,16 +165,6 @@ dataSegmentChart = function(measure, level, linesToShow, filterSegments) {
 
 ## Update Google sheet
 
-#tableColnames1 = c("Company", "SEP 17", "vs PP, pp", "YTD 17", "vs PY, pp", "MAT 17", "vs PY, pp")
-#tableColnames2 = c("Brand", "SEP 17", "vs PP, pp", "YTD 17", "vs PY, pp", "MAT 17", "vs PY, pp")
-#tableColnames3 = c("Company", "MAT 16", "MAT 17", ".", "YTD 16", "YTD 17", ".",
-#                   "SEP 16", " OCT 16", "NOV 16", "DEC 16", "JAN 17", "FEB 17", "MAR 17",
-#                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17")
-#tableColnames4 = c("Brand", "MAT 16", "MAT 17", ".", "YTD 16", "YTD 17", ".",
-#                   "SEP 16", " OCT 16", "NOV 16", "DEC 16", "JAN 17", "FEB 17", "MAR 17",
-#                   "APR 17", "MAY 17", "JUN 17", "JUL 17", "AUG 17", "SEP 17")
-#tableColnames5 = c("Segment", "SEP 17", "L3M", "YTD 17")
-
 tableColnames1 = c("Company", "FEB 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
 tableColnames2 = c("Brand", "FEB 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
 tableColnames3 = c("Company", "MAT 17", "MAT 18", ".", "YTD 17", "YTD 18", ".",
