@@ -1,4 +1,4 @@
-setwd("/home/sergiy/Documents/Work/Nutricia/Rework/201809")
+setwd("/home/sergiy/Documents/Work/Nutricia/Rework/201811")
 
 library(data.table)
 library(reshape2)
@@ -12,7 +12,7 @@ library(googlesheets)
 data = fread("BFprocessed.csv", header = TRUE, stringsAsFactors = FALSE, data.table = TRUE)
 
 # Set current month
-YTD.No = 9
+YTD.No = 11
 
 dataTable = function(measure, level, linesToShow, filterSegments = NULL) {
     
@@ -165,17 +165,15 @@ dataSegmentChart = function(measure, level, linesToShow, filterSegments) {
 
 ## Update Google sheet
 
-tableColnames1 = c("Company", "SEP 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
-tableColnames2 = c("Brand", "SEP 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
+tableColnames1 = c("Company", "NOV 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
+tableColnames2 = c("Brand", "NOV 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
 tableColnames3 = c("Company", "MAT 17", "MAT 18", ".", "YTD 17", "YTD 18", ".",
-                   "'SEP 17", "'OCT 17",
                    "'NOV 17", "'DEC 17", "'JAN 18", "'FEB 18", "'MAR 18", "'APR 18", "'MAY 18", "'JUN 18", "'JUL 18",
-                   "'AUG 18", "'SEP 18")
+                   "'AUG 18", "'SEP 18", "'OCT 18", "'NOV 18")
 tableColnames4 = c("Company", "MAT 17", "MAT 18", ".", "YTD 17", "YTD 18", ".",
-                   "'SEP 17", "'OCT 17",
                    "'NOV 17", "'DEC 17", "'JAN 18", "'FEB 18", "'MAR 18", "'APR 18", "'MAY 18", "'JUN 18", "'JUL 18",
-                   "'AUG 18", "'SEP 18")
-tableColnames5 = c("Segment", "SEP 18", "L3M", "YTD 18")
+                   "'AUG 18", "'SEP 18", "'OCT 18", "'NOV 18")
+tableColnames5 = c("Segment", "NOV 18", "L3M", "YTD 18")
 
 # tableColnames1 = c("Company", "JUL 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
 # tableColnames2 = c("Brand", "JUL 18", "vs PP, pp", "YTD 18", "dif. vs YTD17", "MAT 18", "dif. vs MAT17")
